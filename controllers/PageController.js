@@ -23,3 +23,4 @@ exports.getLoginPage = (req, res) => {
     page_name: 'login',
   });
 };
+
