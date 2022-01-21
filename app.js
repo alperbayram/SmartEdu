@@ -1,6 +1,7 @@
 const express = require('express');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const PageRoute = require('./routes/PageRoute');
 const CourseRoute = require('./routes/CourseRoute');
 const CategoryRoute = require('./routes/CategoryRoute');
@@ -15,10 +16,26 @@ mongoose.connect('mongodb://localhost/smartedu-db').then(() => {
 //template engine
 app.set('view engine', 'ejs');
 
+//global variable
+global.userIN = null;
+
+
 //middlewares
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: 'my_keyboard_cat',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use('*', (req, res, next) => {
+  userIN = req.session.userID;
+  next();
+});
+
 
 //routes
 app.use('/', PageRoute);

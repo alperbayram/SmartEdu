@@ -18,18 +18,19 @@ exports.createUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    await User.findOne({ email }, (err, user) => {
-      if (user) {
-        bcrypt.compare(password, user.password, (err, same) => {
-          if (same) {
-            // USER SESSION
-            res.status(200).send('YOU ARE LOGGED IN');
-          }
-        });
-      }
-    });
-  
+  await User.findOne({ email: email }, function (err, user) {
+    if (user) {
+      bcrypt.compare(password, user.password, (err, same) => {
+        if (same) {
+          // USER SESSION
+          req.session.userID = user._id;
+          res.status(200).redirect('/');
+        }
+      });
+    } else {
+      throw err;
+    }
+  }).clone().catch(function(err){ console.log(err)});
 };
