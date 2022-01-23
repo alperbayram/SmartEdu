@@ -10,5 +10,6 @@ router
 router.route('/').get(CourseController.getAllCourses);
 router.route('/:slug').get(CourseController.getCourse);
 router.route('/enroll').post(CourseController.EnrollCourse);
+router.route('/release').post(CourseController.ReleaseCourse);
 
 module.exports = router;
