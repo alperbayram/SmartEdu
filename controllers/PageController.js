@@ -1,10 +1,22 @@
 const nodemailer = require('nodemailer');
+const User = require('../models/User');
+const Category = require('../models/Category');
+const Course = require('../models/Course');
 
-exports.getIndexPage = (req, res) => {
+exports.getIndexPage = async (req, res) => {
   //res.status(200).render('index');
-  console.log(req.session.userID);
+  //console.log(req.session.userID);
+  const courses = await Course.find().sort('-createdAt').limit(2);
+  const totalCourse = await Course.find().countDocuments();
+  const totalStudents = await User.countDocuments({ role: 'student' });
+  const totalTeachers = await User.countDocuments({ role: 'teacher' });
+
   res.status(200).render('index', {
     page_name: 'index',
+    courses,
+    totalCourse,
+    totalStudents,
+    totalTeachers,
   });
 };
 
@@ -74,8 +86,7 @@ exports.sendEmail = async (req, res) => {
     res.status(200).redirect('contact');
   } catch (error) {
     //req.flash('error', `something happened! ${error}`);
-    req.flash('error', "Something happend!")
+    req.flash('error', 'Something happend!');
     res.status(200).redirect('contact');
-
   }
 };
