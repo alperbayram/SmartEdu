@@ -27,5 +27,6 @@ router.route('/signup').post(
 router.route('/login').post(AuthController.loginUser);
 router.route('/logout').get(AuthController.logoutUser);
 router.route('/dashboard').get(authMiddleware, AuthController.getDashboardPage);
+router.route('/:id').delete(AuthController.DeleteUser);
 
 module.exports = router;
